@@ -2,24 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Key Detection</title>
+  <title>Key Detection - in progress</title>
   <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
 </head>
 <body>
 <script>
-const pressed = [];
-const secretCode = 'wesbos';
+
+const pressed =[];
+const secretCode = 'vanilla';
 
 window.addEventListener('keyup', (e) => {
   console.log(e.key);
   pressed.push(e.key);
-  pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
+  pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length); // keeps the last 7 keys in the pressed array (or however many digits are in secretCode)
   if (pressed.join('').includes(secretCode)) {
-    console.log('DING DING!');
+    console.log('WOO HOO!');
     cornify_add();
   }
-  console.log(pressed);
+  console.log({pressed});
 });
+
 </script>
 </body>
 </html>
