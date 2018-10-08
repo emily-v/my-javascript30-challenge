@@ -28,7 +28,46 @@
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  const items = JSON.parse(localStorage.getItem('items')) || [];
+  
+  function addItem(e) {
+    e.preventDefault(); //needed to prevent form submission from refreshing page
+    const text = (this.querySelector('[name=item]')).value; //select all elements that have name attribute with value item. Parentheses around query statement so it runs before .value is pulled
+    // this = form .add-items
+    const item = {
+      text, //ES6 shorthand for text: text
+      done: false
+    };
+    items.push(item);
+    populateList(items, itemsList);
+    localStorage.setItem('items', JSON.stringify(items));
+    this.reset();
+  }
+  
+  function populateList(plates = [], platesList) { //set to empty array to avoid error if plates is empty
+    platesList.innerHTML = plates.map((plate, index) => {
+      return `
+        <li>
+          <input type="checkbox" data-index=${index} id="item${index}" ${plate.done ? 'checked' : ''}/>
+          <label for="item${index}">${plate.text}</label>
+        </li>
+      `;
+    }).join(''); //join mapped array items together into single innerHTML string
+  }
+  
+  function toggleDone(e) {
+    if(!e.target.matches('input')) return; //skip this unless it's an input
+    const element = e.target;
+    const itemIndex = element.dataset.index;
+    items[itemIndex].done = !items[itemIndex].done; //toggle done state
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  }
+  
+  addItems.addEventListener('submit', addItem);
+  itemsList.addEventListener('click', toggleDone);
+  
+  populateList(items, itemsList);
 
 </script>
 
